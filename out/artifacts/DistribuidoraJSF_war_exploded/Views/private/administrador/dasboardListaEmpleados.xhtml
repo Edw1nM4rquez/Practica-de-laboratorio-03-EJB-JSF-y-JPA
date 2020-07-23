@@ -1,0 +1,309 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                template="../../templates/dashboard.xhtml">
+
+    <ui:define name="metadata">
+        <style type="text/css">
+            .ui-grid-row .ui-grid-col-2,
+            .ui-grid-row .ui-grid-col-10 {
+                padding: 0.5em 0;
+                margin-left: 10px;
+            }
+
+            .ui-g-12, .ui-sm-12 {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .ui-datagrid-column .ui-panel.ui-widget-content {
+                border: none;
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="title">
+        Empleado
+    </ui:define>
+    <ui:define name="center-header">
+        <f:event listener="#{sesionControlador.verificarSesion}" type="preRenderView"></f:event>
+    </ui:define>
+    <ui:define name="menu-begin">
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="#{resource['dist/img/user2-160x160.jpg']}" class="img-circle" alt="User Image"/>
+            </div>
+            <div class="pull-left info">
+                <p>#{sesionControlador.empleado.nombre} #{sesionControlador.empleado.apellido}</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> #{sesionControlador.empleado.rol.nombre}</a>
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="user-control">
+        <ul class="nav navbar-nav">
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <img src="#{resource['dist/img/user2-160x160.jpg']}" class="user-image" alt="User Image"/>
+                    <span class="hidden-xs">#{sesionControlador.empleado.nombre} #{sesionControlador.empleado.apellido}</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+            </li>
+        </ul>
+    </ui:define>
+
+
+    <ui:define name="menu">
+
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">
+                MENÚ PRINCIPAL
+            </li>
+            <li>
+                <p:link outcome="dashboard.xhtml">
+                    <i class="fa fa-dashboard"></i>
+                    <span>Dashboard</span>
+                </p:link>
+            </li>
+
+            <li>
+                <p:link outcome="dasboardBodega.xhtml">
+                    <i class="fa fa-building"></i>
+                    <span>Bodegas</span>
+                </p:link>
+            </li>
+
+            <li>
+                <p:link outcome="dasboardCategoria.xhtml">
+                    <i class="fa fa-cubes" aria-hidden="true"></i>
+                    <span>Categorías</span>
+                </p:link>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-barcode" aria-hidden="true"></i>
+                    <span>Producto</span>
+                    <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <p:link outcome="dasboardProducto.xhtml">
+                            <i class="fa fa-plus-square-o" aria-hidden="true"></i> Nuevo Producto
+                        </p:link>
+                    </li>
+                    <li>
+                        <p:link outcome="dasboardListaProductos.xhtml">
+                            <i class="fa fa-list" aria-hidden="true"></i> Lista de productos
+                        </p:link>
+                    </li>
+
+                    <li>
+                        <p:link outcome="dasboardControlStock.xhtml">
+                            <i class="fa fa-truck" aria-hidden="true"></i> Control Stock
+                        </p:link>
+                    </li>
+                </ul>
+            </li>
+
+
+            <li>
+                <p:link outcome="dasboardListaPedidos.xhtml">
+                    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                    <span>Pedidos</span>
+                </p:link>
+            </li>
+
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <span>Extras</span>
+                    <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <p:link outcome="dasboardRoles.xhtml">
+                            <i class="fa fa-address-card" aria-hidden="true"></i>
+                            <span>Roles</span>
+                        </p:link>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                            <span>Empleados</span>
+                            <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <p:link outcome="dasboardEmpleado.xhtml">
+                                    <i class="fa fa-user-plus" aria-hidden="true"></i> Nuevo Empleado
+                                </p:link>
+                            </li>
+                            <li>
+                                <p:link outcome="dasboardListaEmpleados.xhtml">
+                                    <i class="fa fa-users" aria-hidden="true"></i> Lista de empleados
+                                </p:link>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <p:link outcome="dasboardUbicaciones.xhtml">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            <span>Ubicaciones</span>
+                        </p:link>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="header">
+                CONTROL CUENTA
+            </li>
+
+            <li>
+                <p:commandLink action="#{sesionControlador.cerrarSesion}" >
+                    <i class="fa fa-sign-out"></i>
+                    <span>Cerrar Sesión</span>
+                </p:commandLink>
+            </li>
+
+        </ul>
+
+    </ui:define>
+
+    <ui:define name="body">
+        <p:panel styleClass="card box-info" header="Nuevo Empleado">
+            <h:form>
+                <p:growl showDetail="true" life="3000" severity="info,fatal">
+                    <p:autoUpdate/>
+                </p:growl>
+                <div class="ui-g ui-fluid" >
+                    <div class="ui-g-1">
+                        <p:outputLabel for="cedula" value="Cédula:"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:inputMask id="cedula"  value="#{empleadoBean.empleado.cedula}" mask="999999999-9" required="true" requiredMessage="Campo Obligatorio"/>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgCedula" for="cedula" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="nombres" value="Nombres:"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:inputText id="nombres" value="#{empleadoBean.empleado.nombre}" required="true" requiredMessage="Campo Obligatorio">
+                            <p:keyFilter for="nombres" regEx="/[a-zA-Z ]/" />
+                        </p:inputText>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgNombres" for="nombres" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="apellidos" value="Apellidos:"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:inputText id="apellidos" value="#{empleadoBean.empleado.apellido}" required="true" requiredMessage="Campo Obligatorio">
+                        <p:keyFilter for="apellidos" regEx="/[a-zA-Z ]/" />
+                    </p:inputText>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgApellidos" for="apellidos" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="direccion" value="Dirección:"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:inputText id="direccion" value="#{empleadoBean.empleado.direccion}" required="true" requiredMessage="Campo Obligatorio"/>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgDireccion" for="direccion" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="celular" value="Celular:" />
+                    </div>
+                    <div class="ui-g-4">
+                        <p:inputMask id="celular"  value="#{empleadoBean.empleado.telefono}" mask="(999) 999-9999" required="true" requiredMessage="Campo Obligatorio"/>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgCelular" for="celular" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="correo" value="Correo:"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:inputText id="correo" value="#{empleadoBean.empleado.correo}" required="true" requiredMessage="Campo Obligatorio" validatorMessage="Correo Invalido">
+                            <f:validateRegex
+                            pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    </p:inputText>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgCorreo" for="correo" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="password" value="Password"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:password id="password" value="#{empleadoBean.empleado.password}" feedback="true" required="true" requiredMessage="Campo Obligatorio" validatorMessage="Contraseña Insegura">
+                            <f:validateRegex
+                                    pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" />
+                        </p:password>
+
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgPassword" for="password" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="select" value="Rol"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:selectOneMenu id="select" value="#{empleadoBean.empleado.rol}"  converter="omnifaces.SelectItemsIndexConverter" required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItem itemValue="#{null}" itemLabel="Seleccionar" noSelectionOption="true" />
+                            <f:selectItems value="#{rolBean.rolList}" var="rol" itemLabel="#{rol.nombre}" itemValue="#{rol}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgSelect" for="select" class="ui-g-3"/>
+                    </div>
+
+                </div>
+                <div class="box-footer" align="center">
+                    <p:commandButton action="#{empleadoBean.crear}" id="submitButton"  styleClass="btn-primary" value="Agregar" update="@form"
+                                     ignoreAutoUpdate="true" />
+                </div>
+            </h:form>
+
+        </p:panel>
+    </ui:define>
+
+    <ui:define name="footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 1.0
+        </div>
+        <strong>Copyright 2020 <a href="">Tucto S.A.</a>.</strong> Todos los derechos reservado.
+    </ui:define>
+
+</ui:composition>

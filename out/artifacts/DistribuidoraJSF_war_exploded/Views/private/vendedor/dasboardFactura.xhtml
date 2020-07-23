@@ -1,0 +1,367 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                template="../../templates/dashboard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+    <ui:define name="center-header">
+        <f:event listener="#{sesionControlador.verificarSesion}" type="preRenderView"></f:event>
+    </ui:define>
+
+    <ui:define name="title">
+        Factura
+        <small>Nueva</small>
+    </ui:define>
+
+    <ui:define name="menu-begin">
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="#{resource['dist/img/user2-160x160.jpg']}" class="img-circle" alt="User Image"/>
+            </div>
+            <div class="pull-left info">
+                <p>#{sesionControlador.empleado.nombre} #{sesionControlador.empleado.apellido}</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> #{sesionControlador.empleado.rol.nombre}</a>
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="user-control">
+        <ul class="nav navbar-nav">
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <img src="#{resource['dist/img/user2-160x160.jpg']}" class="user-image" alt="User Image"/>
+                    <span class="hidden-xs">#{sesionControlador.empleado.nombre} #{sesionControlador.empleado.apellido}</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+            </li>
+        </ul>
+    </ui:define>
+
+    <ui:define name="menu">
+
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">
+                MENÚ PRINCIPAL
+            </li>
+            <li>
+                <p:link outcome="dashboard.xhtml">
+                    <i class="fa fa-dashboard"></i>
+                    <span>Dashboard</span>
+                </p:link>
+            </li>
+
+            <li>
+                <p:link outcome="dasboardCliente.xhtml">
+                    <i class="fa fa-users"></i>
+                    <span>Clientes</span>
+                </p:link>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-file" aria-hidden="true"></i>
+                    <span>Facturación</span>
+                    <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <p:link outcome="dasboardFactura.xhtml">
+                            <i class="fa fa-credit-card-alt" aria-hidden="true"></i> Nueva Factura
+                        </p:link>
+                    </li>
+                    <li>
+                        <p:link outcome="dasboardListaFacturas.xhtml">
+                            <i class="fa fa-list-alt" aria-hidden="true"></i> Lista de Facturas
+                        </p:link>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="header">
+                CONTROL CUENTA
+            </li>
+
+            <li>
+                <p:commandLink action="#{sesionControlador.cerrarSesion}" >
+                    <i class="fa fa-sign-out"></i>
+                    <span>Cerrar Sesión</span>
+                </p:commandLink>
+            </li>
+
+        </ul>
+
+    </ui:define>
+
+    <ui:define name="body">
+        <p:panel styleClass="card box-info" header="Nuevo Factura">
+            <p:panel styleClass="card">
+                <h:form id="formGeneral">
+                    <p:growl id="messages" showDetail="true"/>
+
+                    <p:toolbar>
+                        <f:facet name="left">
+                            <p:commandButton type="button" value="Añadir Cliente" onclick="PF('dialogClients').show();"  icon="fa fa-user" styleClass="btn-primary"/>
+                            <p:commandButton type="button" value="Añadir Producto" onclick="PF('dialogProductos').show();"  icon="fa fa-cube" styleClass="btn-info"/>
+                        </f:facet>
+                    </p:toolbar>
+                </h:form>
+            </p:panel>
+        </p:panel>
+
+        <p:dialog header="Productos" id="dlgProductos" widgetVar="dialogProductos" appendTo="@(body)" responsive="true" width="900"
+                  modal="true">
+            <h:form>
+            <p:dataTable value="#{stockBean.stockList}" var="stock" paginator="true" paginatorPosition="bottom"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="10,15,20" rows="10" rowKey="#{stock.codigo}"
+                          emptyMessage="No productos que coincidan con su busqueda">
+
+                <p:column filterBy="#{stock.producto.codigo}" sortBy="#{stock.producto.codigo}" headerText="Codigo"   filterMatchMode="contains" priority="1">
+                    <h:outputText value="#{stock.producto.codigo}"/>
+                </p:column>
+                <p:column headerText="Nombre" filterBy="#{stock.producto.nombre}"  filterMatchMode="contains">
+                    <h:outputText value="#{stock.producto.nombre}"/>
+                </p:column>
+                <p:column headerText="Bodega" filterBy="#{stock.bodega.nombre}" filterMatchMode="contains">
+                    <h:outputText value="#{stock.bodega.nombre}"/>
+                </p:column>
+
+                <p:column headerText="Precio">
+                    <h:outputText value="#{stock.producto.precio}"/>
+                </p:column>
+
+                <p:column headerText="I.V.A">
+                    <h:outputText value="#{stock.producto.iva}"/>
+                </p:column>
+
+
+                <p:column headerText="Cantidad">
+                    <h:outputText value="#{stock.catidad}"/>
+                </p:column>
+
+                <p:column headerText="Action">
+
+                    <p:commandButton value="Agregar"
+                                     actionListener="#{facturaCabeceraBean.agregarDetalle(stock)}" update=":facturaForm"
+                                     onclick="PF('dlgProductos').hide();"/>
+                </p:column>
+            </p:dataTable>
+            </h:form>
+        </p:dialog>
+
+
+
+        <p:dialog  id="dlgClientes" widgetVar="dialogClients" appendTo="@(body)" responsive="true" width="1200" modal="true">
+            <h:form>
+            <p:dataTable value="#{clienteBean.clientes}" var="cliente" paginator="true" paginatorPosition="bottom"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="10,15,20" rows="10" rowKey="#{cliente.cedula}"
+                         emptyMessage="No productos que coincidan con su busqueda">
+
+                <p:column filterBy="#{cliente.cedula}" sortBy="#{cliente.cedula}" headerText="Cedula"   filterMatchMode="exact" priority="1">
+                    <h:outputText value="#{cliente.cedula}"/>
+                </p:column>
+
+                <p:column filterBy="#{cliente.apellido}" sortBy="#{cliente.apellido}" headerText="Apellidos"   filterMatchMode="contains" priority="1">
+                    <h:outputText value="#{cliente.apellido}"/>
+                </p:column>
+
+                <p:column  headerText="Nombres">
+                    <h:outputText value="#{cliente.nombre}"/>
+
+                </p:column>
+
+                <p:column  headerText="Correo">
+                    <h:outputText value="#{cliente.correo}"/>
+
+                </p:column>
+                <p:column  headerText="Telefono">
+                    <h:outputText value="#{cliente.telefono}"/>
+
+                </p:column>
+                <p:column headerText="Direccion">
+                    <h:outputText value="#{cliente.direccion}"/>
+
+
+                </p:column>
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Agregar"  onclick="PF('dialogClients').hide();"
+                                   actionListener="#{facturaCabeceraBean.agregarCliente(cliente)}" update=":facturaForm" />
+                </p:column>
+            </p:dataTable>
+            </h:form>
+        </p:dialog>
+
+        <p:panel>
+        <!-- Main content -->
+        <section class="invoice">
+            <!-- title row -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2 class="page-header">
+                        <i class="fa fa-globe"></i> TUCTO S.A.
+                        <small class="pull-right">Fecha: 19/07/2020</small>
+                    </h2>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- info row -->
+            <h:form id="facturaForm">
+            <div class="row invoice-info">
+                <div class="col-sm-4 invoice-col">
+                    <strong>CLIENTE</strong>
+                    <address>
+                        <strong>#{facturaCabeceraBean.facturaCabecera.cliente.cedula}</strong><br/>
+                        <strong>Apellidos y Nombres:</strong> #{facturaCabeceraBean.facturaCabecera.cliente.apellido} #{facturaCabeceraBean.facturaCabecera.cliente.nombre} <br/>
+                        <strong>Direccion:</strong> #{facturaCabeceraBean.facturaCabecera.cliente.direccion} <br/>
+                        <strong>Correo:</strong> #{facturaCabeceraBean.facturaCabecera.cliente.correo} <br/>
+                        <strong>Celular:</strong> #{facturaCabeceraBean.facturaCabecera.cliente.telefono}
+                    </address>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
+                    <strong>Vendedor</strong>
+                    <address>
+                        <strong>#{facturaCabeceraBean.facturaCabecera.empleado.cedula}</strong><br/>
+                        <strong>Apellidos y Nombres:</strong> #{facturaCabeceraBean.facturaCabecera.empleado.apellido} #{facturaCabeceraBean.facturaCabecera.empleado.nombre} <br/>
+                        <strong>Direccion:</strong> #{facturaCabeceraBean.facturaCabecera.empleado.direccion} <br/>
+                        <strong>Correo:</strong> #{facturaCabeceraBean.facturaCabecera.empleado.correo} <br/>
+                        <strong>Celular:</strong> #{facturaCabeceraBean.facturaCabecera.empleado.telefono}
+                    </address>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
+                    <b>FACTURA #000000</b><br/>
+                    <br/>
+                    <b>Factura ID:</b> 4F3S8J<br/>
+                    <b>Fecha de Pago:</b> 23/07/2020<br/>
+                    <b>Cuenta:</b> 968-34567
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+
+            <!-- Table row -->
+            <div class="row">
+                <div class="col-xs-12 table-responsive">
+                    <p:growl id="messagess" showDetail="true"/>
+                        <p:dataTable id="faturaDetalle" value="#{facturaCabeceraBean.facturaDetalles}" var="detalle"
+                                      class="table table-striped" rowIndexVar="rowIndex" editable="true">
+                            <p:ajax event="rowEdit" listener="#{facturaCabeceraBean.onRowEdit}" update=":facturaForm" />
+                            <p:ajax event="rowEditCancel" listener="#{facturaCabeceraBean.onRowCancel}"/>
+
+                            <p:column headerText="Codigo">
+                                <h:outputText value="#{detalle.producto.codigo}"/>
+                            </p:column>
+
+                            <p:column headerText="Producto">
+                                <h:outputText value="#{detalle.producto.nombre}"/>
+                            </p:column>
+
+                            <p:column headerText="Precio">
+                                <h:outputText value="#{detalle.producto.precio}"/>
+                            </p:column>
+
+                            <p:column headerText="Cantidad">
+                                <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{detalle.cantida}"/></f:facet>
+                                <f:facet name="input">
+                                    <p:inputText id="modelInput" value="#{detalle.cantida}" style="width:100%" required="true" requiredMessage="Cantidad requerida"
+                                    converter="#{Integer}" converterMessage="La catidad ha de ser numerica"/>
+                                </f:facet>
+                            </p:cellEditor>
+
+                            </p:column>
+
+                            <p:column headerText="Total">
+                           <h:outputText value="#{detalle.total}" />
+                            </p:column>
+                            <p:column headerText="Editar cantidad">
+                                <p:rowEditor />
+                            </p:column>
+
+                            <p:column headerText="Eliminar">
+                                <p:commandLink value="X" actionListener="#{facturaCabeceraBean.quitarProducto(detalle.producto.codigo,rowIndex)}" update=":facturaForm"/>
+                            </p:column>
+                        </p:dataTable>
+
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+
+            <div class="row">
+                <!-- accepted payments column -->
+                <div class="col-xs-6">
+                    <p class="lead">Métodos de pago:</p>
+                    <img src="#{resource['dist/img/credit/visa.png']}" alt="Visa"/>
+                    <img src="#{resource['dist/img/credit/mastercard.png']}" alt="Mastercard"/>
+                    <img src="#{resource['dist/img/credit/american-express.png']}" alt="American Express"/>
+                    <img src="#{resource['dist/img/credit/paypal2.png']}" alt="Paypal"/>
+
+                    <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+
+                    </p>
+                </div>
+                <!-- /.col -->
+                <div class="col-xs-6">
+                    <p class="lead">Fecha de Pago #{facturaCabeceraBean.facturaCabecera.fecha}</p>
+                    <div class="table-responsive">
+
+                        <table class="table" id="valoresFinales">
+                            <tr>
+                                <th style="width:50%">Subtotal:</th>
+                                <td>$#{facturaCabeceraBean.facturaCabecera.subtotal}</td>
+                            </tr>
+                            <tr>
+                                <th>IVA (12%)</th>
+                                <td>$#{facturaCabeceraBean.facturaCabecera.iva}</td>
+                            </tr>
+                            <tr>
+                                <th>Total:</th>
+                                <td>$#{facturaCabeceraBean.facturaCabecera.total}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+
+            <!-- this row will not appear when printing -->
+            <div class="row no-print">
+                <div class="col-xs-12">
+                    <p:commandButton action="#{facturaCabeceraBean.crear}" id="submitButton"  icon="fa fa-credit-card" styleClass="btn-primary" value="Finalizar Compra" update="facturaForm"
+                                     ignoreAutoUpdate="true" />
+
+                    <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
+                        <i class="fa fa-download"></i> Generate PDF
+                    </button>
+                </div>
+            </div>
+            </h:form>
+        </section>
+        <!-- /.content -->
+
+        </p:panel>
+    </ui:define>
+
+    <ui:define name="footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 1.0
+        </div>
+        <strong>Copyright 2020 <a href="">Tucto S.A.</a>.</strong> Todos los derechos reservado.
+    </ui:define>
+
+</ui:composition>

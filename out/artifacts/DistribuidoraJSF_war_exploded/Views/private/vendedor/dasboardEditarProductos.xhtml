@@ -1,0 +1,225 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                template="../../templates/dashboard.xhtml">
+
+    <ui:define name="metadata">
+        <style type="text/css">
+            .ui-grid-row .ui-grid-col-2,
+            .ui-grid-row .ui-grid-col-10 {
+                padding: 0.5em 0;
+                margin-left: 10px;
+            }
+
+            .ui-g-12, .ui-sm-12 {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .ui-datagrid-column .ui-panel.ui-widget-content {
+                border: none;
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="title">
+        Cliente
+    </ui:define>
+    <ui:define name="menu-begin">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="#{resource['dist/img/user2-160x160.jpg']}" class="img-circle" alt="User Image"/>
+            </div>
+            <div class="pull-left info">
+                <p>Alexander Pierce</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> ADMINISTRADOR</a>
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="description">
+    </ui:define>
+
+    <ui:define name="menu">
+
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">
+                MENÚ PRINCIPAL
+            </li>
+            <li>
+                <p:link outcome="dashboard.xhtml">
+                    <i class="fa fa-dashboard"></i>
+                    <span>Dashboard</span>
+                </p:link>
+            </li>
+
+            <li>
+                <p:link outcome="dasboardRoles.xhtml">
+                    <i class="fa fa-address-card" aria-hidden="true"></i>
+                    <span>Roles</span>
+                </p:link>
+            </li>
+
+
+        </ul>
+
+    </ui:define>
+
+    <ui:define name="body">
+        <ui:param name="renderFormAsterisks" value="true"/>
+
+        <h:form id="form" prependId="false">
+            <p:focus context="@form"/>
+            <p:panel styleClass="box-primary card">
+                <div id="main-buttons" class="hidden-sm hidden-xs">
+                    <p:commandButton value="Guardar" action="#{samplePageMB.save}" update="@form" icon="fa fa-check"
+                                     styleClass="btn-primary"/>
+                    <p:spacer width="5" rendered="#{samplePageMB.isNew()}"/>
+                    <p:commandButton value="Cancelar" action="#{samplePageMB.clear}" process="@this"
+                                     icon="fa fa-refresh" styleClass="btn-success" update="@form"
+                                     rendered="#{samplePageMB.isNew()}" resetValues="true"/>
+                    <p:spacer width="5" rendered="#{not samplePageMB.isNew()}"/>
+                    <p:commandButton value="Eliminar" action="#{samplePageMB.remove}" process="@this" update="@form"
+                                     rendered="#{not samplePageMB.isNew()}" icon="fa fa-trash"
+                                     styleClass="btn-danger">
+                        <f:setPropertyActionListener value="true"
+                                                     target="#{facesContext.externalContext.flash.keepMessages}"/>
+                        <p:confirm header="Confirmacion" message="¿Esta seguro?" icon="ui-icon-danger"/>
+                    </p:commandButton>
+                    <p:spacer width="5"/>
+
+                    <p:commandButton value="Salir" immediate="true" styleClass="btn-default"
+                                     action="/index?faces-redirect=true" process="@this"
+                                     icon="fa fa-reply"/>
+                </div>
+
+                <p:splitButton value="Guardar" action="#{samplePageMB.save}" update="@form" icon="fa fa-check"
+                               styleClass="hidden-md hidden-lg btn-primary">
+                    <p:menuitem value="Actualizar" action="#{samplePageMB.clear}" process="@this" update="@form"
+                                rendered="#{samplePageMB.isNew()}" resetValues="true" icon="fa fa-refresh"/>
+                    <p:menuitem value="Eliminar" action="#{samplePageMB.remove}" process="@this" update="@form"
+                                rendered="#{not samplePageMB.isNew()}" icon="fa fa-trash">
+                        <f:setPropertyActionListener value="true"
+                                                     target="#{facesContext.externalContext.flash.keepMessages}"/>
+                        <p:confirm header="Confirmacion" message="¿Esta seguro?" icon="ui-icon-danger"/>
+                    </p:menuitem>
+                    <p:separator/>
+                    <p:menuitem value="Salir" action="/index?faces-redirect=true" process="@this"
+                                immediate="true" styleClass="btn-default" icon="fa fa-reply"/>
+                </p:splitButton>
+
+                <p:separator/>
+                <div class="ui-g ui-fluid">
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:outputLabel for="codigo" value="Codigo"/>
+                        </div>
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:inputText id="codigo" value="#{productoBean.producto.codigo}" maxlength="50"
+                                         required="true" requiredMessage="Se requiere un codigo"/>
+                            <span class="help-block">
+                                    <p:message for="codigo"/>
+                                </span>
+                        </div>
+                    </div>
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:outputLabel for="nombre" value="Nombre"/>
+                        </div>
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:inputText id="nombre" value="#{productoBean.producto.nombre}" maxlength="50"
+                                         required="true" requiredMessage="El nombre es requerido"/>
+                            <span class="help-block">
+                                    <p:message for="nombre"/>
+                                </span>
+                        </div>
+                    </div>
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:outputLabel for="imagen" value="Imagen"/>
+                        </div>
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:inputText id="imagen" value="#{productoBean.image}" mode="simple"
+                                         required="true" requiredMessage="Campo Obligatorio"/>
+                            <span class="help-block">
+                                    <p:message for="imagen"/>
+                                </span>
+                        </div>
+                    </div>
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:outputLabel for="precio" value="Precio"/>
+                        </div>
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:inputText id="precio" value="#{productoBean.producto.precio}" minValue="1"
+                                         decimalPlaces="2" required="true" requiredMessage="Campo Obligatorio"/>
+                            <span class="help-block">
+                                    <p:message for="precio"/>
+                                </span>
+                        </div>
+                    </div>
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:outputLabel for="iva" value="IVA"/>
+                        </div>
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:inputText id="iva" value="#{productoBean.producto.iva}" symbol="%"
+                                         symbolPosition="s" required="true" emptyValue="empty" requiredMessage="Campo Obligatorio"/>
+                            <span class="help-block">
+                                    <p:message for="iva"/>
+                                </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:outputLabel for="categoria" value="Categoria"/>
+                        </div>
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:selectOneMenu id="categoria" value="#{productoBean.producto.categoria}"  converter="omnifaces.SelectItemsIndexConverter" required="true" requiredMessage="Campo Obligatorio">
+                                <f:selectItem itemValue="#{null}" itemLabel="Seleccionar" noSelectionOption="true" />
+                                <f:selectItems value="#{categoriaBean.categoriaList}" var="categoria" itemLabel="#{categoria.nombre}" itemValue="#{categoria}"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-g-nopad">
+                        <div class="ui-g-12">
+                            <p:outputLabel for="descripcion" value="Descripcion"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputTextarea id="descripcion" rows="3" cols="20" counter="display" maxlength="2000"
+                                             counterTemplate="{0} remaining chars"
+                                             autoResize="true"/>
+                            <span class="help-block">
+                                    <h:outputText id="display"/>
+                                    <p:message for="descripcion"/>
+                                </span>
+                        </div>
+                    </div>
+                </div>
+            </p:panel>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+                <p:commandButton value="Yes" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+                                 icon="fa fa-check"/>
+                <p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+                                 icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 1.0
+        </div>
+        <strong>Copyright 2020 <a href="">Tucto S.A.</a>.</strong> Todos los derechos reservado.
+    </ui:define>
+
+</ui:composition>

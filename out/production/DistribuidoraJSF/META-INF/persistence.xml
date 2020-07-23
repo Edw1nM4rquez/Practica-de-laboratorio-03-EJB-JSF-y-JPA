@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+
+    <persistence-unit name="DistribuidoraJSF" transaction-type="JTA">
+        <jta-data-source>jdbc/__distribuidora</jta-data-source>
+        <class>ec.edu.ups.entidad.Persona</class>
+        <class>ec.edu.ups.entidad.Cliente</class>
+        <class>ec.edu.ups.entidad.Empleado</class>
+        <class>ec.edu.ups.entidad.Rol</class>
+        <class>ec.edu.ups.entidad.Pais</class>
+        <class>ec.edu.ups.entidad.Provincia</class>
+        <class>ec.edu.ups.entidad.Ciudad</class>
+        <class>ec.edu.ups.entidad.Categoria</class>
+        <class>ec.edu.ups.entidad.FacturaCabecera</class>
+        <class>ec.edu.ups.entidad.FacturaDetalle</class>
+        <properties>
+            <property name="javax.persistence.schema-generation.database.action" value="create"/>
+            <property name="eclipselink.flush-clear.cache" value="Drop"/>
+        </properties>
+    </persistence-unit>
+</persistence>

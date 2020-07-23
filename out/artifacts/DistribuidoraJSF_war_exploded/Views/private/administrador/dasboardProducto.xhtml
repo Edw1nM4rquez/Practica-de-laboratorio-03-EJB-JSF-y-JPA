@@ -1,0 +1,292 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                template="../../templates/dashboard.xhtml">
+
+    <ui:define name="metadata">
+        <style type="text/css">
+            .ui-grid-row .ui-grid-col-2,
+            .ui-grid-row .ui-grid-col-10 {
+                padding: 0.5em 0;
+                margin-left: 10px;
+            }
+
+            .ui-g-12, .ui-sm-12 {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .ui-datagrid-column .ui-panel.ui-widget-content {
+                border: none;
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="title">
+        Producto
+    </ui:define>
+    <ui:define name="center-header">
+        <f:event listener="#{sesionControlador.verificarSesion}" type="preRenderView"></f:event>
+    </ui:define>
+    <ui:define name="menu-begin">
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="#{resource['dist/img/user2-160x160.jpg']}" class="img-circle" alt="User Image"/>
+            </div>
+            <div class="pull-left info">
+                <p>#{sesionControlador.empleado.nombre} #{sesionControlador.empleado.apellido}</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> #{sesionControlador.empleado.rol.nombre}</a>
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="user-control">
+        <ul class="nav navbar-nav">
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <img src="#{resource['dist/img/user2-160x160.jpg']}" class="user-image" alt="User Image"/>
+                    <span class="hidden-xs">#{sesionControlador.empleado.nombre} #{sesionControlador.empleado.apellido}</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+            </li>
+        </ul>
+    </ui:define>
+
+    <ui:define name="menu">
+
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">
+                MENÚ PRINCIPAL
+            </li>
+            <li>
+                <p:link outcome="dashboard.xhtml">
+                    <i class="fa fa-dashboard"></i>
+                    <span>Dashboard</span>
+                </p:link>
+            </li>
+
+            <li>
+                <p:link outcome="dasboardBodega.xhtml">
+                    <i class="fa fa-building"></i>
+                    <span>Bodegas</span>
+                </p:link>
+            </li>
+
+            <li>
+                <p:link outcome="dasboardCategoria.xhtml">
+                    <i class="fa fa-cubes" aria-hidden="true"></i>
+                    <span>Categorías</span>
+                </p:link>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-barcode" aria-hidden="true"></i>
+                    <span>Producto</span>
+                    <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <p:link outcome="dasboardProducto.xhtml">
+                            <i class="fa fa-plus-square-o" aria-hidden="true"></i> Nuevo Producto
+                        </p:link>
+                    </li>
+                    <li>
+                        <p:link outcome="dasboardListaProductos.xhtml">
+                            <i class="fa fa-list" aria-hidden="true"></i> Lista de productos
+                        </p:link>
+                    </li>
+
+                    <li>
+                        <p:link outcome="dasboardControlStock.xhtml">
+                            <i class="fa fa-truck" aria-hidden="true"></i> Control Stock
+                        </p:link>
+                    </li>
+                </ul>
+            </li>
+
+
+            <li>
+                <p:link outcome="dasboardListaPedidos.xhtml">
+                    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                    <span>Pedidos</span>
+                </p:link>
+            </li>
+
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <span>Extras</span>
+                    <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <p:link outcome="dasboardRoles.xhtml">
+                            <i class="fa fa-address-card" aria-hidden="true"></i>
+                            <span>Roles</span>
+                        </p:link>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                            <span>Empleados</span>
+                            <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <p:link outcome="dasboardEmpleado.xhtml">
+                                    <i class="fa fa-user-plus" aria-hidden="true"></i> Nuevo Empleado
+                                </p:link>
+                            </li>
+                            <li>
+                                <p:link outcome="dasboardListaEmpleados.xhtml">
+                                    <i class="fa fa-users" aria-hidden="true"></i> Lista de empleados
+                                </p:link>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <p:link outcome="dasboardUbicaciones.xhtml">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            <span>Ubicaciones</span>
+                        </p:link>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="header">
+                CONTROL CUENTA
+            </li>
+
+            <li>
+                <p:commandLink action="#{sesionControlador.cerrarSesion}" >
+                    <i class="fa fa-sign-out"></i>
+                    <span>Cerrar Sesión</span>
+                </p:commandLink>
+            </li>
+
+        </ul>
+
+    </ui:define>
+
+    <ui:define name="body">
+        <p:panel styleClass="card box-info" header="Nuevo Producto">
+            <h:form enctype="multipart/form-data">
+                <p:growl showDetail="true" life="3000" severity="info,fatal">
+                    <p:autoUpdate/>
+                </p:growl>
+                <div class="ui-g ui-fluid" >
+                    <div class="ui-g-1">
+                        <p:outputLabel for="codigo" value="Codigo:"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:inputMask id="codigo"  value="#{productoBean.producto.codigo}" mask="a*-999-a999" required="true" requiredMessage="Campo Obligatorio"/>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgCodigo" for="codigo" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="nombre" value="Nombres:"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:inputText id="nombre" value="#{productoBean.producto.nombre}" required="true" requiredMessage="Campo Obligatorio">
+                            <p:keyFilter for="nombre" regEx="/[a-zA-Z ]/" />
+                        </p:inputText>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgNombre" for="nombre" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="imagen" value="Imagen:"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:fileUpload id="imagen" value="#{productoBean.image}" mode="simple" required="true" requiredMessage="Campo Obligatorio"/>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgImagen" for="imagen" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="precio" value="Precio:"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:inputNumber id="precio" value="#{productoBean.producto.precio}" minValue="1" decimalPlaces="2" required="true">
+                        </p:inputNumber>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgPrecio" for="precio" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="iva" value="IVA:"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:inputNumber id="iva" value="#{productoBean.producto.iva}" symbol="%"
+                                       symbolPosition="s" required="true" emptyValue="empty"  requiredMessage="Campo Obligatorio">
+                        </p:inputNumber>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgIva" for="iva" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="selectCategoria" value="Categoria"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:selectOneMenu id="selectCategoria" value="#{productoBean.producto.categoria}"  converter="omnifaces.SelectItemsIndexConverter" required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItem itemValue="#{null}" itemLabel="Seleccionar" noSelectionOption="true" />
+                            <f:selectItems value="#{categoriaBean.categoriaList}" var="categoria" itemLabel="#{categoria.nombre}" itemValue="#{categoria}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgSelectCategoria" for="selectCategoria" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="descripcion" value="Descripcion"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:textEditor id="descripcion" widgetVar="editor1" value="#{productoBean.producto.descripcion}" height="300" style="margin-bottom:10px"/>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgDescription" for="descripcion" class="ui-g-3"/>
+                    </div>
+
+                </div>
+                <div class="box-footer" align="center">
+                    <p:commandButton actionListener="#{productoBean.crear}" id="submitButton"  ajax="false"
+                                     styleClass="btn-primary" value="Agregar" update="@form"/>
+                </div>
+            </h:form>
+
+        </p:panel>
+    </ui:define>
+
+    <ui:define name="footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 1.0
+        </div>
+        <strong>Copyright 2020 <a href="">Tucto S.A.</a>.</strong> Todos los derechos reservado.
+    </ui:define>
+
+</ui:composition>

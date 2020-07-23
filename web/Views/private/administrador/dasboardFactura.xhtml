@@ -1,0 +1,358 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                template="../../templates/dashboard.xhtml">
+
+    <ui:define name="metadata">
+        <style type="text/css">
+            .ui-datatable {
+                margin-bottom: 25px
+            }
+
+            .ui-datatable .ui-datatable-header {
+                text-align: right !important;
+            }
+
+            .ui-button-text-only .ui-button-text {
+                padding: 0.3em 0.4em;
+            }
+
+            .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-chkbox {
+                visibility: hidden;
+            }
+
+            .ui-filter-column .ui-column-customfilter .custom-filter {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .year-spinner input {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="title">
+        Factura
+    </ui:define>
+    <ui:define name="menu-begin">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="#{resource['dist/img/user2-160x160.jpg']}" class="img-circle" alt="User Image"/>
+            </div>
+            <div class="pull-left info">
+                <p>Alexander Pierce</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> ADMINISTRADOR</a>
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="description">
+    </ui:define>
+
+    <ui:define name="menu">
+
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">
+                MENÚ PRINCIPAL
+            </li>
+            <li>
+                <p:link outcome="dashboard.xhtml">
+                    <i class="fa fa-dashboard"></i>
+                    <span>Dashboard</span>
+                </p:link>
+            </li>
+
+            <li>
+                <p:link outcome="dasboardRoles.xhtml">
+                    <i class="fa fa-address-card" aria-hidden="true"></i>
+                    <span>Roles</span>
+                </p:link>
+            </li>
+
+
+        </ul>
+
+    </ui:define>
+
+    <ui:define name="body">
+        <p:panel styleClass="card box-info" header="Nuevo Factura">
+            <p:panel styleClass="card">
+                <h:form id="formGeneral">
+                    <p:growl id="messages" showDetail="true"/>
+
+                    <p:toolbar>
+                        <f:facet name="left">
+                            <p:commandButton type="button" value="Añadir Cliente" onclick="PF('dialogClients').show();"  icon="fa fa-user" styleClass="btn-primary"/>
+                            <p:commandButton type="button" value="Añadir Producto" onclick="PF('dialogProductos').show();"  icon="fa fa-cube" styleClass="btn-info"/>
+                        </f:facet>
+                    </p:toolbar>
+                </h:form>
+            </p:panel>
+        </p:panel>
+
+        <p:dialog header="Productos" id="dlgProductos" widgetVar="dialogProductos" appendTo="@(body)" responsive="true" width="900" modal="true">
+            <h:form>
+            <p:dataTable value="#{stockBean.stockList}" var="stock" paginator="true" paginatorPosition="bottom"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="10,15,20" rows="10" rowKey="#{stock.codigo}"
+                          emptyMessage="No productos que coincidan con su busqueda">
+
+                <p:column filterBy="#{stock.producto.codigo}" sortBy="#{stock.producto.codigo}" headerText="Codigo"   filterMatchMode="contains" priority="1">
+                    <h:outputText value="#{stock.producto.codigo}"/>
+                </p:column>
+                <p:column headerText="Nombre" filterBy="#{stock.producto.nombre}"  filterMatchMode="contains">
+                    <h:outputText value="#{stock.producto.nombre}"/>
+                </p:column>
+                <p:column headerText="Bodega" filterBy="#{stock.bodega.nombre}" filterMatchMode="contains">
+                    <h:outputText value="#{stock.bodega.nombre}"/>
+                </p:column>
+
+                <p:column headerText="Precio">
+                    <h:outputText value="#{stock.producto.precio}"/>
+                </p:column>
+
+                <p:column headerText="I.V.A">
+                    <h:outputText value="#{stock.producto.iva}"/>
+                </p:column>
+
+
+                <p:column headerText="Cantidad">
+                    <h:outputText value="#{stock.catidad}"/>
+                </p:column>
+
+                <p:column headerText="Action">
+
+                    <p:commandButton value="Agregar"
+                                     actionListener="#{facturaCabeceraBean.agregarDetalle(stock)}" update=":facturaForm"
+                                     onclick="PF('dlgProductos').hide();"/>
+                </p:column>
+            </p:dataTable>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dlgCantidadProducto" widgetVar="dialogCantidadProducto" header="Cantidad"
+                  modal="true">
+            <p:inputText id="cantidadProducto"  value="#{facturaCabeceraBean.facturaDetalle.cantida}"/>
+            <p:commandButton value="Agergar" actionListener="#{facturaCabeceraBean.agregarDetalle(stock)}"
+                             update=":facturaForm" onclick="PF('dialogCantidadProducto').hide();"/>
+        </p:dialog>
+
+        <p:dialog  id="dlgClientes" widgetVar="dialogClients" appendTo="@(body)" responsive="true" width="1200" modal="true">
+            <h:form>
+            <p:dataTable value="#{clienteBean.list}" var="cliente" paginator="true" paginatorPosition="bottom"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="10,15,20" rows="10" rowKey="#{cliente.cedula}"
+                         emptyMessage="No productos que coincidan con su busqueda">
+
+                <p:column filterBy="#{cliente.cedula}" sortBy="#{cliente.cedula}" headerText="Cedula"   filterMatchMode="exact" priority="1">
+                    <h:outputText value="#{cliente.cedula}"/>
+                </p:column>
+
+                <p:column filterBy="#{cliente.apellido}" sortBy="#{cliente.apellido}" headerText="Apellidos"   filterMatchMode="contains" priority="1">
+                    <h:outputText value="#{cliente.apellido}"/>
+                </p:column>
+
+                <p:column  headerText="Nombres">
+                    <h:outputText value="#{cliente.nombre}"/>
+
+                </p:column>
+
+                <p:column  headerText="Correo">
+                    <h:outputText value="#{cliente.correo}"/>
+
+                </p:column>
+                <p:column  headerText="Telefono">
+                    <h:outputText value="#{cliente.telefono}"/>
+
+                </p:column>
+                <p:column headerText="Direccion">
+                    <h:outputText value="#{cliente.direccion}"/>
+
+
+                </p:column>
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Agregar"  onclick="PF('dialogClients').hide();"
+                                   actionListener="#{facturaCabeceraBean.agregarCliente(cliente)}" update=":facturaForm" />
+                </p:column>
+            </p:dataTable>
+            </h:form>
+        </p:dialog>
+
+        <p:panel>
+        <!-- Main content -->
+        <section class="invoice">
+            <!-- title row -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2 class="page-header">
+                        <i class="fa fa-globe"></i> TUCTO S.A.
+                        <small class="pull-right">Fecha: 19/07/2020</small>
+                    </h2>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- info row -->
+            <h:form id="facturaForm">
+            <div class="row invoice-info">
+                <div class="col-sm-4 invoice-col">
+                    <strong>CLIENTE</strong>
+                    <address>
+                        <strong>#{facturaCabeceraBean.facturaCabecera.cliente.cedula}</strong><br/>
+                        <strong>Apellidos y Nombres:</strong> #{facturaCabeceraBean.facturaCabecera.cliente.apellido} #{facturaCabeceraBean.facturaCabecera.cliente.nombre} <br/>
+                        <strong>Direccion:</strong> #{facturaCabeceraBean.facturaCabecera.cliente.direccion} <br/>
+                        <strong>Correo:</strong> #{facturaCabeceraBean.facturaCabecera.cliente.correo} <br/>
+                        <strong>Celular:</strong> #{facturaCabeceraBean.facturaCabecera.cliente.telefono}
+                    </address>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
+                    <strong>Vendedor</strong>
+                    <address>
+                        <strong>#{facturaCabeceraBean.facturaCabecera.empleado.cedula}</strong><br/>
+                        <strong>Apellidos y Nombres:</strong> #{facturaCabeceraBean.facturaCabecera.empleado.apellido} #{facturaCabeceraBean.facturaCabecera.empleado.nombre} <br/>
+                        <strong>Direccion:</strong> #{facturaCabeceraBean.facturaCabecera.empleado.direccion} <br/>
+                        <strong>Correo:</strong> #{facturaCabeceraBean.facturaCabecera.empleado.correo} <br/>
+                        <strong>Celular:</strong> #{facturaCabeceraBean.facturaCabecera.empleado.telefono}
+                    </address>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
+                    <b>FACTURA #000000</b><br/>
+                    <br/>
+                    <b>Factura ID:</b> 4F3S8J<br/>
+                    <b>Fecha de Pago:</b> 19/07/2020<br/>
+                    <b>Cuenta:</b> 968-34567
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+
+            <!-- Table row -->
+            <div class="row">
+                <div class="col-xs-12 table-responsive">
+
+                        <p:dataTable id="faturaDetalle" value="#{facturaCabeceraBean.facturaDetalles}" var="detalle"
+                                     editable="true" editMode="cell" widgetVar="cellCars" class="table table-striped">
+
+                            <p:column headerText="Codigo">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{detalle.producto.codigo}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="inputCodigo" value="#{detalle.producto.codigo}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Producto">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{detalle.producto.nombre}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="inputProducto" value="#{detalle.producto.nombre}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Precio">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{detalle.producto.precio}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="inputPrecio" value="#{detalle.producto.precio}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Cantidad">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{detalle.cantida}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput" value="#{detalle.cantida}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Total">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{detalle.total}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelTotal" value="#{detalle.total}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Accion">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{detalle.total}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelAccion" value="#{detalle.total}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                        </p:dataTable>
+
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+
+            <div class="row">
+                <!-- accepted payments column -->
+                <div class="col-xs-6">
+                    <p class="lead">Métodos de pago:</p>
+                    <img src="#{resource['dist/img/credit/visa.png']}" alt="Visa"/>
+                    <img src="#{resource['dist/img/credit/mastercard.png']}" alt="Mastercard"/>
+                    <img src="#{resource['dist/img/credit/american-express.png']}" alt="American Express"/>
+                    <img src="#{resource['dist/img/credit/paypal2.png']}" alt="Paypal"/>
+
+                    <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+
+                    </p>
+                </div>
+                <!-- /.col -->
+                <div class="col-xs-6">
+                    <p class="lead">Fecha de Pago #{facturaCabeceraBean.facturaCabecera.fecha}</p>
+                    <div class="table-responsive">
+
+                        <table class="table">
+                            <tr>
+                                <th style="width:50%">Subtotal:</th>
+                                <td>$#{facturaCabeceraBean.facturaCabecera.subtotal}</td>
+                            </tr>
+                            <tr>
+                                <th>IVA (12%)</th>
+                                <td>$#{facturaCabeceraBean.facturaCabecera.iva}</td>
+                            </tr>
+                            <tr>
+                                <th>Total:</th>
+                                <td>$#{facturaCabeceraBean.facturaCabecera.total}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+
+            <!-- this row will not appear when printing -->
+            <div class="row no-print">
+                <div class="col-xs-12">
+                    <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
+                    <p:commandButton action="#{facturaCabeceraBean.crear}" id="submitButton"  icon="fa fa-credit-card" styleClass="btn-primary" value="Finalizar Compra" update="@form"
+                                     ignoreAutoUpdate="true" />
+                    <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
+                        <i class="fa fa-download"></i> Generate PDF
+                    </button>
+                </div>
+            </div>
+            </h:form>
+        </section>
+        <!-- /.content -->
+
+        </p:panel>
+    </ui:define>
+
+    <ui:define name="footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 1.0
+        </div>
+        <strong>Copyright 2020 <a href="">Tucto S.A.</a>.</strong> Todos los derechos reservado.
+    </ui:define>
+
+</ui:composition>

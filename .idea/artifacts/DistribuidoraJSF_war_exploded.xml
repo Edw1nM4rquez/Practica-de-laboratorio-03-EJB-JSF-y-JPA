@@ -1,0 +1,20 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="DistribuidoraJSF:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/DistribuidoraJSF_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="DistribuidoraJSF/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="DistribuidoraJSF" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="JPA 2.2-2.2" />
+          <element id="library" level="project" name="com.github.adminfaces:admin-template:1.1.1" />
+          <element id="library" level="project" name="commons-fileupload:commons-fileupload:1.4" />
+          <element id="library" level="project" name="commons-io:commons-io:2.7" />
+          <element id="library" level="project" name="com.thetransactioncompany:cors-filter:2.9" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

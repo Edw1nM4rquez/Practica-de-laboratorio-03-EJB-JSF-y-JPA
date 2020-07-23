@@ -1,0 +1,354 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="../../templates/dashboard.xhtml">
+
+    <ui:define name="center-header">
+        <h:outputStylesheet library = "bower_components" name = "bootstrap/dist/css/bootstrap.min.css" />
+        <h:outputStylesheet library = "bower_components" name = "font-awesome/css/font-awesome.min.css" />
+        <h:outputStylesheet library = "bower_components" name = "Ionicons/css/ionicons.min.css" />
+        <h:outputStylesheet library = "dist" name = "css/AdminLTE.min.css" />
+        <h:outputStylesheet library = "dist" name = "css/skins/_all-skins.min.css" />
+        <h:outputStylesheet library = "bower_components" name = "morris.js/morris.css" />
+        <h:outputStylesheet library = "bower_components" name = "jvectormap/jquery-jvectormap.css" />
+        <h:outputStylesheet library = "bower_components" name = "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
+        <h:outputStylesheet library = "bower_components" name = "bootstrap-daterangepicker/daterangepicker.css" />
+        <h:outputStylesheet library = "plugins" name = "bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"/>
+        <f:event listener="#{sesionControlador.verificarSesion}" type="preRenderView"></f:event>
+    </ui:define>
+    <ui:define name="title">
+        Dashboard Vendedor
+    </ui:define>
+    <ui:define name="menu-begin">
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="#{resource['dist/img/user2-160x160.jpg']}" class="img-circle" alt="User Image"/>
+            </div>
+            <div class="pull-left info">
+                <p>#{sesionControlador.empleado.nombre} #{sesionControlador.empleado.apellido}</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> #{sesionControlador.empleado.rol.nombre}</a>
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="user-control">
+        <ul class="nav navbar-nav">
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <img src="#{resource['dist/img/user2-160x160.jpg']}" class="user-image" alt="User Image"/>
+                    <span class="hidden-xs">#{sesionControlador.empleado.nombre} #{sesionControlador.empleado.apellido}</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+            </li>
+        </ul>
+    </ui:define>
+    <ui:define name="menu">
+
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">
+                MENÚ PRINCIPAL
+            </li>
+            <li>
+                <p:link outcome="dashboard.xhtml">
+                    <i class="fa fa-dashboard"></i>
+                    <span>Dashboard</span>
+                </p:link>
+            </li>
+
+            <li>
+                <p:link outcome="dasboardCliente.xhtml">
+                    <i class="fa fa-users"></i>
+                    <span>Clientes</span>
+                </p:link>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-file" aria-hidden="true"></i>
+                    <span>Facturación</span>
+                    <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <p:link outcome="dasboardFactura.xhtml">
+                            <i class="fa fa-credit-card-alt" aria-hidden="true"></i> Nueva Factura
+                        </p:link>
+                    </li>
+                    <li>
+                        <p:link outcome="dasboardListaFacturas.xhtml">
+                            <i class="fa fa-list-alt" aria-hidden="true"></i> Lista de Facturas
+                        </p:link>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="header">
+                CONTROL CUENTA
+            </li>
+
+            <li>
+                <p:commandLink action="#{sesionControlador.cerrarSesion}" >
+                    <i class="fa fa-sign-out"></i>
+                    <span>Cerrar Sesión</span>
+                </p:commandLink>
+            </li>
+
+        </ul>
+
+    </ui:define>
+
+
+    <ui:define name="body">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3>150</h3>
+
+                        <p>New Orders</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>53<sup style="font-size: 20px">%</sup></h3>
+
+                        <p>Bounce Rate</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3>44</h3>
+
+                        <p>User Registrations</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-user-plus" aria-hidden="true"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3>65</h3>
+
+                        <p>Unique Visitors</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-pie-chart" aria-hidden="true"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+        <!-- Main row -->
+        <div class="row">
+            <!-- Left col -->
+            <section class="col-lg-7 connectedSortable">
+                <!-- Custom tabs (Charts with tabs)-->
+                <div class="nav-tabs-custom">
+                    <!-- Tabs within a box -->
+                    <ul class="nav nav-tabs pull-right">
+                        <li class="active"><a href="#revenue-chart" data-toggle="tab">Area</a></li>
+                        <li><a href="#sales-chart" data-toggle="tab">Donut</a></li>
+                        <li class="pull-left header"><i class="fa fa-inbox"></i> Sales</li>
+                    </ul>
+                    <div class="tab-content no-padding">
+                        <!-- Morris chart - Sales -->
+                        <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div>
+                        <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
+                    </div>
+                </div>
+                <!-- /.nav-tabs-custom -->
+                <!-- solid sales graph -->
+                <div class="box box-solid bg-teal-gradient">
+                    <div class="box-header">
+                        <i class="fa fa-th"></i>
+
+                        <h3 class="box-title">Sales Graph</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn bg-teal btn-sm" data-widget="remove"><i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body border-radius-none">
+                        <div class="chart" id="line-chart" style="height: 250px;"></div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer no-border">
+                        <div class="row">
+                            <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
+                                <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
+                                       data-fgColor="#39CCCC"/>
+
+                                <div class="knob-label">Mail-Orders</div>
+                            </div>
+                            <!-- ./col -->
+                            <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
+                                <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
+                                       data-fgColor="#39CCCC"/>
+
+                                <div class="knob-label">Online</div>
+                            </div>
+                            <!-- ./col -->
+                            <div class="col-xs-4 text-center">
+                                <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
+                                       data-fgColor="#39CCCC"/>
+
+                                <div class="knob-label">In-Store</div>
+                            </div>
+                            <!-- ./col -->
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.box-footer -->
+                </div>
+                <!-- /.box -->
+
+            </section>
+            <!-- /.Left col -->
+            <!-- right col (We are only adding the ID to make the widgets sortable)-->
+            <section class="col-lg-5 connectedSortable">
+
+                <!-- Map box -->
+                <div class="box box-solid bg-light-blue-gradient">
+                    <div class="box-header">
+                        <!-- tools box -->
+                        <div class="pull-right box-tools">
+                            <button type="button" class="btn btn-primary btn-sm daterange pull-right" data-toggle="tooltip"
+                                    title="Date range">
+                                <i class="fa fa-calendar"></i></button>
+                            <button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse"
+                                    data-toggle="tooltip" title="Collapse" style="margin-right: 5px;">
+                                <i class="fa fa-minus"></i></button>
+                        </div>
+                        <!-- /. tools -->
+
+                        <i class="fa fa-map-marker"></i>
+
+                        <h3 class="box-title">
+                            Visitors
+                        </h3>
+                    </div>
+                    <div class="box-body">
+                        <div id="world-map" style="height: 250px; width: 100%;"></div>
+                    </div>
+                    <!-- /.box-body-->
+                    <div class="box-footer no-border">
+                        <div class="row">
+                            <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
+                                <div id="sparkline-1"></div>
+                                <div class="knob-label">Visitors</div>
+                            </div>
+                            <!-- ./col -->
+                            <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
+                                <div id="sparkline-2"></div>
+                                <div class="knob-label">Online</div>
+                            </div>
+                            <!-- ./col -->
+                            <div class="col-xs-4 text-center">
+                                <div id="sparkline-3"></div>
+                                <div class="knob-label">Exists</div>
+                            </div>
+                            <!-- ./col -->
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                </div>
+                <!-- /.box -->
+
+                <!-- Calendar -->
+                <div class="box box-solid bg-green-gradient">
+                    <div class="box-header">
+                        <i class="fa fa-calendar"></i>
+                        <h3 class="box-title">Calendar</h3>
+                        <!-- tools box -->
+                        <div class="pull-right box-tools">
+                            <!-- button with a dropdown -->
+                            <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                        <!-- /. tools -->
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        <!--The calendar -->
+                        <div id="calendar" style="width: 100%"></div>
+                    </div>
+                </div>
+                <!-- /.box -->
+
+            </section>
+            <!-- right col -->
+        </div>
+        <!-- /.row (main row) -->
+    </ui:define>
+
+    <ui:define name="body-end">
+        <!-- Scripts-->
+        <h:outputScript library="bower_components" name="jquery/dist/jquery.min.js"  target="head"/>
+        <h:outputScript library="bower_components" name="jquery-ui/jquery-ui.min.js"  target="head"/>
+        <script>
+            $.widget.bridge('uibutton', $.ui.button);
+        </script>
+        <h:outputScript library="bower_components" name="bootstrap/dist/js/bootstrap.min.js"  target="head"/>
+        <h:outputScript library="bower_components" name="raphael/raphael.min.js"  target="head"/>
+        <h:outputScript library="bower_components" name="morris.js/morris.min.js"  target="head"/>
+        <h:outputScript library="bower_components" name="jquery-sparkline/dist/jquery.sparkline.min.js"  target="head"/>
+        <h:outputScript library="bower_components" name="jquery-knob/dist/jquery.knob.min.js"  target="head"/>
+        <h:outputScript library="bower_components" name="moment/min/moment.min.js"  target="head"/>
+        <h:outputScript library="bower_components" name="bootstrap-daterangepicker/daterangepicker.js"  target="head"/>
+        <h:outputScript library="bower_components" name="bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"  target="head"/>
+        <h:outputScript library="bower_components" name="jquery-slimscroll/jquery.slimscroll.min.js"  target="head"/>
+        <h:outputScript library="bower_components" name="fastclick/lib/fastclick.js"  target="head"/>
+        <h:outputScript library="plugins" name="jvectormap/jquery-jvectormap-1.2.2.min.js"  target="head"/>
+        <h:outputScript library="plugins" name="jvectormap/jquery-jvectormap-world-mill-en.js"  target="head"/>
+        <h:outputScript library="plugins" name="bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"  target="head"/>
+        <h:outputScript library="dist" name="js/pages/dashboard.js"  target="head"/>
+        <h:outputScript library="dist" name="js/demo.js"  target="head"/>
+        <!-- End Scripts-->
+    </ui:define>
+
+    <ui:define name="footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 1.0
+        </div>
+        <strong>Copyright 2020 <a href="">Tucto S.A.</a>.</strong> Todos los derechos reservado.
+    </ui:define>
+
+</ui:composition>

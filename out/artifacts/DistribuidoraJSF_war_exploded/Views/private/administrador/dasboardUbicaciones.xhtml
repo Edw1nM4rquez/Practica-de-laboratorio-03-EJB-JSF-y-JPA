@@ -1,0 +1,312 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                template="../../templates/dashboard.xhtml">
+
+    <ui:define name="metadata">
+        <style type="text/css">
+            .ui-grid-row .ui-grid-col-2,
+            .ui-grid-row .ui-grid-col-10 {
+                padding: 0.5em 0;
+                margin-left: 10px;
+            }
+
+            .ui-g-12, .ui-sm-12 {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .ui-datagrid-column .ui-panel.ui-widget-content {
+                border: none;
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="title">
+        Ubicaciones
+    </ui:define>
+    <ui:define name="center-header">
+        <f:event listener="#{sesionControlador.verificarSesion}" type="preRenderView"></f:event>
+    </ui:define>
+    <ui:define name="menu-begin">
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="#{resource['dist/img/user2-160x160.jpg']}" class="img-circle" alt="User Image"/>
+            </div>
+            <div class="pull-left info">
+                <p>#{sesionControlador.empleado.nombre} #{sesionControlador.empleado.apellido}</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> #{sesionControlador.empleado.rol.nombre}</a>
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="user-control">
+        <ul class="nav navbar-nav">
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <img src="#{resource['dist/img/user2-160x160.jpg']}" class="user-image" alt="User Image"/>
+                    <span class="hidden-xs">#{sesionControlador.empleado.nombre} #{sesionControlador.empleado.apellido}</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+            </li>
+        </ul>
+    </ui:define>
+
+    <ui:define name="menu">
+
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">
+                MENÚ PRINCIPAL
+            </li>
+            <li>
+                <p:link outcome="dashboard.xhtml">
+                    <i class="fa fa-dashboard"></i>
+                    <span>Dashboard</span>
+                </p:link>
+            </li>
+
+            <li>
+                <p:link outcome="dasboardBodega.xhtml">
+                    <i class="fa fa-building"></i>
+                    <span>Bodegas</span>
+                </p:link>
+            </li>
+
+            <li>
+                <p:link outcome="dasboardCategoria.xhtml">
+                    <i class="fa fa-cubes" aria-hidden="true"></i>
+                    <span>Categorías</span>
+                </p:link>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-barcode" aria-hidden="true"></i>
+                    <span>Producto</span>
+                    <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <p:link outcome="dasboardProducto.xhtml">
+                            <i class="fa fa-plus-square-o" aria-hidden="true"></i> Nuevo Producto
+                        </p:link>
+                    </li>
+                    <li>
+                        <p:link outcome="dasboardListaProductos.xhtml">
+                            <i class="fa fa-list" aria-hidden="true"></i> Lista de productos
+                        </p:link>
+                    </li>
+
+                    <li>
+                        <p:link outcome="dasboardControlStock.xhtml">
+                            <i class="fa fa-truck" aria-hidden="true"></i> Control Stock
+                        </p:link>
+                    </li>
+                </ul>
+            </li>
+
+
+            <li>
+                <p:link outcome="dasboardListaPedidos.xhtml">
+                    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                    <span>Pedidos</span>
+                </p:link>
+            </li>
+
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <span>Extras</span>
+                    <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <p:link outcome="dasboardRoles.xhtml">
+                            <i class="fa fa-address-card" aria-hidden="true"></i>
+                            <span>Roles</span>
+                        </p:link>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                            <span>Empleados</span>
+                            <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <p:link outcome="dasboardEmpleado.xhtml">
+                                    <i class="fa fa-user-plus" aria-hidden="true"></i> Nuevo Empleado
+                                </p:link>
+                            </li>
+                            <li>
+                                <p:link outcome="dasboardListaEmpleados.xhtml">
+                                    <i class="fa fa-users" aria-hidden="true"></i> Lista de empleados
+                                </p:link>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <p:link outcome="dasboardUbicaciones.xhtml">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            <span>Ubicaciones</span>
+                        </p:link>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="header">
+                CONTROL CUENTA
+            </li>
+
+            <li>
+                <p:commandLink action="#{sesionControlador.cerrarSesion}" >
+                    <i class="fa fa-sign-out"></i>
+                    <span>Cerrar Sesión</span>
+                </p:commandLink>
+            </li>
+
+        </ul>
+
+    </ui:define>
+
+    <ui:define name="body">
+        <p:panel styleClass="card box-info" header="Nuevo País">
+            <h:form id="formPais">
+                <p:growl showDetail="true" life="3000" severity="info,fatal">
+                    <p:autoUpdate/>
+                </p:growl>
+                <div class="ui-g ui-fluid" >
+                    <div class="ui-g-1">
+                        <p:outputLabel for="nombre" value="Nombre:"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:inputText id="nombre" value="#{paisBean.pais.nombre}" required="true" requiredMessage="Campo Obligatorio">
+                            <p:keyFilter for="nombre" regEx="/[a-zA-Z]/" />
+                        </p:inputText>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgNombre" for="nombre" class="ui-g-3"/>
+                    </div>
+                </div>
+                <div class="box-footer" align="center">
+                    <p:commandButton action="#{paisBean.crear}" id="submitButton"  styleClass="btn-primary" value="Agregar" update="formPais,formProvincia"
+                                     ignoreAutoUpdate="true" />
+                </div>
+            </h:form>
+        </p:panel>
+
+        <p:panel styleClass="card box-info" header="Nueva Provincia">
+            <h:form id="formProvincia">
+                <p:growl showDetail="true" life="3000" severity="info,fatal">
+                    <p:autoUpdate/>
+                </p:growl>
+                <div class="ui-g ui-fluid" >
+                    <div class="ui-g-1">
+                        <p:outputLabel for="nombreProvincia" value="Nombre:"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:inputText id="nombreProvincia" value="#{provinciaBean.provincia.nombre}" required="true" requiredMessage="Campo Obligatorio">
+                            <p:keyFilter for="nombreProvincia" regEx="/[a-zA-Z]/" />
+                        </p:inputText>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgNombreProvincia" for="nombreProvincia" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="selectPais" value="País"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:selectOneMenu id="selectPais" value="#{provinciaBean.provincia.pais}"  converter="omnifaces.SelectItemsIndexConverter" required="true" requiredMessage="Campo Obligatorio">
+                            <f:selectItem itemValue="#{null}" itemLabel="Seleccionar" noSelectionOption="true" />
+                            <f:selectItems value="#{paisBean.paisList}" var="pais" itemLabel="#{pais.nombre}" itemValue="#{pais}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgSelect" for="selectPais" class="ui-g-3"/>
+                    </div>
+                </div>
+                <div class="box-footer" align="center">
+                    <p:commandButton action="#{provinciaBean.crear}" id="submitButton1"  styleClass="btn-primary" value="Agregar" update="formProvincia"
+                                     ignoreAutoUpdate="true" />
+                </div>
+            </h:form>
+        </p:panel>
+
+        <p:panel styleClass="card box-info" header="Nueva Ciudad">
+            <h:form id="formCiudad">
+                <p:growl showDetail="true" life="3000" severity="info,fatal">
+                    <p:autoUpdate/>
+                </p:growl>
+                <div class="ui-g ui-fluid" >
+                    <div class="ui-g-1">
+                        <p:outputLabel for="nombreCiudad" value="Nombre:"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <p:inputText id="nombreCiudad" value="#{ciudadBean.ciudad.nombre}" required="true" requiredMessage="Campo Obligatorio">
+                            <p:keyFilter for="nombreCiudad" regEx="/[a-zA-Z]/" />
+                        </p:inputText>
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgnombreCiudad" for="nombreCiudad" class="ui-g-3"/>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="selectPaisProvincia" value="País"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <h:selectOneMenu id="selectPaisProvincia" value="#{paisBean.pais}"  class="form-control" converter="omnifaces.SelectItemsIndexConverter">
+                            <f:selectItem itemValue="#{null}" itemLabel="Seleccionar" noSelectionOption="true" />
+                            <f:selectItems value="#{paisBean.paisList}" var="pais" itemLabel="#{pais.nombre}" itemValue="#{pais}"/>
+                            <f:ajax event="change" listener="#{paisBean.cargarProvincias}" render="listaCantones" execute="@this"/>
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="ui-g-1">
+                        <p:outputLabel for="listaCantones" value="Provincia"/>
+                    </div>
+                    <div class="ui-g-4">
+                        <h:selectOneMenu id="listaCantones" value="#{ciudadBean.ciudad.provincia}"  class="form-control" converter="omnifaces.SelectItemsIndexConverter">
+                        <f:selectItem itemValue="#{null}" itemLabel="Seleccionar" noSelectionOption="true" />
+                        <f:selectItems value="#{paisBean.provinciaList}" var="provincia" itemLabel="#{provincia.nombre}" itemValue="#{provincia}"/>
+                        </h:selectOneMenu>
+
+                    </div>
+                    <div class="ui-g-7">
+                        <p:message id="msgSelectProvincia" for="listaCantones" class="ui-g-3"/>
+                    </div>
+                </div>
+                <div class="box-footer" align="center">
+                    <p:commandButton action="#{ciudadBean.crear}" id="submitButton2"  styleClass="btn-primary" value="Agregar" update="formCiudad"
+                                     ignoreAutoUpdate="true" />
+                </div>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+    <ui:define name="footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 1.0
+        </div>
+        <strong>Copyright 2020 <a href="">Tucto S.A.</a>.</strong> Todos los derechos reservado.
+    </ui:define>
+
+</ui:composition>

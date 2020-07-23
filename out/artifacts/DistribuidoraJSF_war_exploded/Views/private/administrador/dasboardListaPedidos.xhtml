@@ -1,0 +1,219 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="../../templates/dashboard.xhtml">
+
+    <ui:define name="metadata">
+
+    </ui:define>
+
+    <ui:define name="title">
+        Pedidos
+    </ui:define>
+    <ui:define name="menu-begin">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="#{resource['dist/img/user2-160x160.jpg']}" class="img-circle" alt="User Image"/>
+            </div>
+            <div class="pull-left info">
+                <p>Alexander Pierce</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> ADMINISTRADOR</a>
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="user-control">
+        <ul class="nav navbar-nav">
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <img src="#{resource['dist/img/user2-160x160.jpg']}" class="user-image" alt="User Image"/>
+                    <span class="hidden-xs">#{sesionControlador.empleado.nombre} #{sesionControlador.empleado.apellido}</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+            </li>
+        </ul>
+    </ui:define>
+    <ui:define name="menu">
+
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">
+                MENÚ PRINCIPAL
+            </li>
+            <li>
+                <p:link outcome="dashboard.xhtml">
+                    <i class="fa fa-dashboard"></i>
+                    <span>Dashboard</span>
+                </p:link>
+            </li>
+
+            <li>
+                <p:link outcome="dasboardBodega.xhtml">
+                    <i class="fa fa-building"></i>
+                    <span>Bodegas</span>
+                </p:link>
+            </li>
+
+            <li>
+                <p:link outcome="dasboardCategoria.xhtml">
+                    <i class="fa fa-cubes" aria-hidden="true"></i>
+                    <span>Categorías</span>
+                </p:link>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-barcode" aria-hidden="true"></i>
+                    <span>Producto</span>
+                    <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <p:link outcome="dasboardProducto.xhtml">
+                            <i class="fa fa-plus-square-o" aria-hidden="true"></i> Nuevo Producto
+                        </p:link>
+                    </li>
+                    <li>
+                        <p:link outcome="dasboardListaProductos.xhtml">
+                            <i class="fa fa-list" aria-hidden="true"></i> Lista de productos
+                        </p:link>
+                    </li>
+
+                    <li>
+                        <p:link outcome="dasboardControlStock.xhtml">
+                            <i class="fa fa-truck" aria-hidden="true"></i> Control Stock
+                        </p:link>
+                    </li>
+                </ul>
+            </li>
+
+
+            <li>
+                <p:link outcome="dasboardListaPedidos.xhtml">
+                    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                    <span>Pedidos</span>
+                </p:link>
+            </li>
+
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <span>Extras</span>
+                    <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <p:link outcome="dasboardRoles.xhtml">
+                            <i class="fa fa-address-card" aria-hidden="true"></i>
+                            <span>Roles</span>
+                        </p:link>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                            <span>Empleados</span>
+                            <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <p:link outcome="dasboardEmpleado.xhtml">
+                                    <i class="fa fa-user-plus" aria-hidden="true"></i> Nuevo Empleado
+                                </p:link>
+                            </li>
+                            <li>
+                                <p:link outcome="dasboardListaEmpleados.xhtml">
+                                    <i class="fa fa-users" aria-hidden="true"></i> Lista de empleados
+                                </p:link>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <p:link outcome="dasboardUbicaciones.xhtml">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            <span>Ubicaciones</span>
+                        </p:link>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="header">
+                CONTROL CUENTA
+            </li>
+
+            <li>
+                <p:commandLink action="#{sesionControlador.cerrarSesion}" >
+                    <i class="fa fa-sign-out"></i>
+                    <span>Cerrar Sesión</span>
+                </p:commandLink>
+            </li>
+
+        </ul>
+
+    </ui:define>
+
+    <ui:define name="body">
+
+        <p:panel  header="Lista de Productos">
+            <h:form id="formClientes" header="Lista de Productos">
+                <p:dataTable value="#{productoBean.productoList}" var="producto" paginator="true" paginatorPosition="bottom"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="10,15,20" rows="10" rowKey="#{producto.codigo}"
+                             emptyMessage="No bodegas que coincidan con su criterio de busqueda">
+
+                    <p:column filterBy="#{producto.codigo}" sortBy="#{producto.codigo}" headerText="Codigo"   filterMatchMode="contains" priority="1">
+                        <h:outputText value="#{producto.codigo}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{producto.nombre}" sortBy="#{producto.nombre}" headerText="Nombre"   filterMatchMode="contains" priority="2">
+                        <h:outputText value="#{producto.nombre}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{producto.categoria.nombre}" sortBy="#{producto.categoria.nombre}" headerText="Categoria"   filterMatchMode="contains" priority="3">
+                        <h:outputText value="#{producto.categoria.nombre}"/>
+                    </p:column>
+
+                    <p:column  headerText="Precio">
+                        <h:outputText value="#{producto.precio}"/>
+                    </p:column>
+
+                    <p:column headerText="Estado">
+                            <span class="badge bg-green"><h:outputText rendered="#{producto.estado=='A'}" value="Disponible"/></span>
+                            <span class="badge bg-red"><h:outputText  rendered="#{producto.estado=='E'}" value="Discontinuado"/></span>
+                    </p:column>
+
+                    <p:column headerText="Acciones">
+
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+        </p:panel>
+    </ui:define>
+
+    <ui:define name="footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 1.0
+        </div>
+        <strong>Copyright 2020 <a href="">Tucto S.A.</a>.</strong> Todos los derechos reservado.
+    </ui:define>
+
+</ui:composition>
